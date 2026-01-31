@@ -27,12 +27,15 @@ function App() {
   const [data, setData] = useState<DesignData | null>(null);
   const [error, setError] = useState('');
   const [recentScans, setRecentScans] = useState<string[]>([]);
+  const [scanDuration, setScanDuration] = useState<number | null>(null);
 
   const analyze = async () => {
     if (!url) return;
     setLoading(true);
     setError('');
     setData(null);
+    setScanDuration(null);
+    const startTime = performance.now();
 
     try {
       const res = await fetch(`${import.meta.env.VITE_API_URL}/analyze`, {
@@ -46,6 +49,8 @@ function App() {
       }
 
       const result = await res.json();
+      const endTime = performance.now();
+      setScanDuration((endTime - startTime) / 1000);
       setData(result);
       setRecentScans(prev => Array.from(new Set([url, ...prev])).slice(0, 5));
     } catch (err) {
@@ -117,10 +122,17 @@ function App() {
               <div className="md:col-span-2 bg-card border border-border/50 rounded-3xl p-8 shadow-sm backdrop-blur-sm relative overflow-hidden">
                 <div className="absolute top-0 right-0 w-64 h-64 bg-primary/5 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2" />
 
-                <h2 className="text-2xl font-bold mb-6 flex items-center gap-2">
-                  <Sparkles className="w-5 h-5 text-purple-500" />
-                  Vibe Check
-                </h2>
+                <div className="flex justify-between items-start mb-6">
+                  <h2 className="text-2xl font-bold flex items-center gap-2">
+                    <Sparkles className="w-5 h-5 text-purple-500" />
+                    Vibe Check
+                  </h2>
+                  {scanDuration && (
+                    <div className="text-xs text-muted-foreground bg-secondary/50 px-2 py-1 rounded-full font-mono">
+                      Extracted in {scanDuration.toFixed(2)}s
+                    </div>
+                  )}
+                </div>
 
                 <div className="grid grid-cols-2 gap-4 mb-6">
                   <div className="bg-background/50 p-4 rounded-2xl border border-border/50">
