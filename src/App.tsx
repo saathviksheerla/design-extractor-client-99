@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Search, Loader2, Palette, Type, Image as ImageIcon, Sparkles, History } from 'lucide-react';
-import { cn } from './lib/utils';
+
 
 interface DesignData {
   colors: {
@@ -35,7 +35,7 @@ function App() {
     setData(null);
 
     try {
-      const res = await fetch('http://localhost:3001/analyze', {
+      const res = await fetch(`${import.meta.env.VITE_API_URL}/analyze`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ url }),
