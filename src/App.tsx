@@ -132,6 +132,14 @@ function App() {
                       Extracted in {scanDuration.toFixed(2)}s
                     </div>
                   )}
+                  <button
+                    onClick={() => {
+                      navigator.clipboard.writeText(url);
+                    }}
+                    className="bg-primary hover:bg-primary/90 text-primary-foreground text-lg font-medium px-8 py-2 rounded-xl transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2 shadow-md hover:shadow-xl active:scale-95"
+                  >
+                    Download result
+                  </button>
                 </div>
 
                 <div className="grid grid-cols-2 gap-4 mb-6">
